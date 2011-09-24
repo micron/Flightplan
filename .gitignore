@@ -3,6 +3,8 @@ Debug/*
 *.exe
 Flugplan2/Debug/*
 ipch/*
+*.opensdf
+
 
 #ignore thumbnails created by windows
 Thumbs.db
