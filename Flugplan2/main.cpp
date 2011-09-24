@@ -8,6 +8,7 @@ int main (void)
 	TFlightplan * flightplan = createFlightplan();
 	TFlightdata * tempFlightdata = NULL;
 
+
 	bool ende = false;
 
 	mainMenue ();
@@ -17,7 +18,7 @@ int main (void)
 	{
 		if (_kbhit())
 		{
-			int flugnummer = 0;
+			int flightnumber = 0;
 			char str = _getch();
 			switch (str)
 			{
@@ -29,24 +30,24 @@ int main (void)
 			case '2': 
 				system("cls");
 				tempFlightdata = createFlightdata();
-				inputFlight (tempFlightdata);
+				inputFlightdata (tempFlightdata);
 				newFlight(flightplan, tempFlightdata);
 				backToMenue(false);
 				break;
 			case '3':
-				/*system("cls");
+				system("cls");
 				cout << "Bitte die zu aendernde Flugnummer eingeben: ";
-				cin >> flugnummer;
-				searchFlight(flugplan, flugnummer);
-				if (currentFlight)
-					changeFlight(currentFlight);
-				backToMenue(0);*/
+				cin >> flightnumber;
+				searchFlight(flightplan, flightnumber);
+				if (flightplan->current)
+					inputFlightdata(flightplan->current->data);
+				backToMenue(0);
 				break;
 			case '4':
 				system("cls");
 				cout << "Bitte die zu loeschende Flugnummer eingeben: ";
-				cin >> flugnummer;
-				searchFlight(flightplan, flugnummer);
+				cin >> flightnumber;
+				searchFlight(flightplan, flightnumber);
 				if (flightplan->current)
 				{
 					removeFlight(flightplan);

@@ -6,5 +6,5 @@
 #include "Flightplan.h"
 
 void	mainMenue		(void);
-void	inputFlight		(TFlightdata * tempFlightdata);
+void	inputFlightdata	(TFlightdata * tempFlightdata);
 void	backToMenue		(bool mitPause);

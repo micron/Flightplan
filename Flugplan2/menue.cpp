@@ -20,7 +20,7 @@ void mainMenue (void)
 	cout << "============================================\n";
 }
 
-void inputFlight (TFlightdata * tempFlightdata)
+void inputFlightdata (TFlightdata * tempFlightdata)
 {
 	cout << "Flugnummer: ";
 	cin >> tempFlightdata->number;
