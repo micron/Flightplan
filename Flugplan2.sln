@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Flugplan2", "Flugplan2\Flugplan2.vcxproj", "{AB593311-3603-4F8E-A0ED-D25F668ACE58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB593311-3603-4F8E-A0ED-D25F668ACE58}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AB593311-3603-4F8E-A0ED-D25F668ACE58}.Debug|Win32.Build.0 = Debug|Win32
+		{AB593311-3603-4F8E-A0ED-D25F668ACE58}.Release|Win32.ActiveCfg = Release|Win32
+		{AB593311-3603-4F8E-A0ED-D25F668ACE58}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
