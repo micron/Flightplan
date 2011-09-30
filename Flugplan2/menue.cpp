@@ -22,25 +22,40 @@ void mainMenue (void)
 
 void inputFlightdata (TFlightdata * tempFlightdata)
 {
-	cout << "Flugnummer: ";
-	cin >> tempFlightdata->number;
-	cin.ignore();
+	int tempInt = 0;
+	string tempString = "";
 
-	cout << "Flug Ziel: ";
-	getline(cin, tempFlightdata->destination);
+	cout << "Flugnummer (" << tempFlightdata->number << "): ";
+	getline(cin, tempString);
+	tempInt = atoi(tempString.c_str());
+	if (tempInt != 0)
+		tempFlightdata->number = tempInt;
 
-	cout << "Zeit: ";
-	getline(cin, tempFlightdata->time);
+	cout << "Flug Ziel (" << tempFlightdata->destination << "): ";
+	getline(cin, tempString);
+	if (tempString != "")
+		tempFlightdata->destination = tempString;
 
-	cout << "Rollbahn: ";
-	cin >> tempFlightdata->rollway;
-	cin.ignore();
+	cout << "Zeit (" << tempFlightdata->time << "): ";
+	getline(cin, tempString);
+	if (tempString != "")
+		tempFlightdata->time = tempString;
 
-	cout << "Pilot: ";
-	getline(cin, tempFlightdata->pilot);
+	cout << "Rollbahn (" << tempFlightdata->rollway << "): ";
+	getline(cin, tempString);
+	tempInt = atoi(tempString.c_str());
+	if (tempInt != 0)
+		tempFlightdata->rollway = tempInt;
 
-	cout << "Flugkennung: ";
-	getline(cin, tempFlightdata->numberplate);
+	cout << "Pilot (" << tempFlightdata->pilot << "): ";
+	getline(cin, tempString);
+	if (tempString != "")
+		tempFlightdata->pilot = tempString;
+
+	cout << "Flugkennung (" << tempFlightdata->numberplate << "): ";
+	getline(cin, tempString);
+	if (tempString != "")
+		tempFlightdata->numberplate = tempString;
 
 };
 

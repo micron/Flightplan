@@ -36,8 +36,10 @@ int main (void)
 				break;
 			case '3':
 				system("cls");
-				cout << "Bitte die zu aendernde Flugnummer eingeben: ";
+				outputFlightPlan(flightplan);
+				cout << "\nBitte die zu aendernde Flugnummer eingeben: ";
 				cin >> flightnumber;
+				cin.ignore();
 				searchFlight(flightplan, flightnumber);
 				if (flightplan->current)
 					inputFlightdata(flightplan->current->data);
@@ -66,7 +68,7 @@ int main (void)
 		Sleep(50);
 	}while (!ende);
 
-	pause();
+	//pause();
 
 	deleteFlightplan(flightplan);
 	return 0;

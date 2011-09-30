@@ -13,13 +13,20 @@ TFlightplan * createFlightplan (void) //geht /not tested
 
 void deleteFlightplan (TFlightplan * flightplan)//könnte fliegen gehen / not tested
 {
+	bool next = false;
 	TFlight * tempFlight;
-	flightplan->current = flightplan->first;
-	while (flightplan->current)
+
+	if (flightplan->count != 0)
 	{
-		tempFlight = flightplan->current;
-		nextFlight(flightplan);
-		deleteFlight(tempFlight);
+		flightplan->current = flightplan->first;
+
+		do
+		{
+			tempFlight = flightplan->current;
+			next = nextFlight(flightplan);			
+			deleteFlight(tempFlight);
+			
+		}while (next);
 	}
 	delete flightplan;
 }
@@ -79,36 +86,11 @@ void removeFlight (TFlightplan * flightplan) //muss überarbeitet werden
 	flightplan->count--;
 };
 
-/*
-void changeFlight (TFlight * currentFlight) // muss neu gecodet werden
-{
-	cout << "Flugnummer: ";
-	cin >> currentFlight->data->number;
-	cin.ignore();
-
-	cout << "Flug Ziel: ";
-	getline(cin, currentFlight->data->destination);
-
-	cout << "Zeit: ";
-	getline(cin, currentFlight->data->time);
-
-	cout << "Rollbahn: ";
-	cin >> currentFlight->data->rollway;
-	cin.ignore();
-
-	cout << "Pilot: ";
-	getline(cin, currentFlight->data->pilot);
-
-	cout << "Flugkennung: ";
-	getline(cin, currentFlight->data->numberplate);
-
-};
-*/
 void searchFlight (TFlightplan * flugplan, int flightnumber)//sollte
 {
 	flugplan->current = flugplan->first;
 	bool ende = false;
-	while (!ende || flugplan->current)
+	while (!ende && flugplan->current)
 	{
 		if (flugplan->current->data->number == flightnumber)
 			ende = true;
@@ -135,14 +117,12 @@ void outputFlightPlan (TFlightplan * flightplan)//geht fliegen (endlosschleife) 
 	if (flightplan->count != 0)
 	{
 		flightplan->current = flightplan->first;
-		while (!flightplan->current)
+		do
 		{
 			outputFlight (flightplan);
 			if (getnextFlight(flightplan->current))
-				nextFlight (flightplan); //endlos schleife...
-			else
-				break;
-		}
+				nextFlight (flightplan);
+		}while (getnextFlight(flightplan->current) != 0);
 	}
 };
 
@@ -150,7 +130,7 @@ bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet
 {
 	bool result = false;
 
-	if (flightplan->current->next != NULL)
+	if (getnextFlight(flightplan->current) != NULL)
 	{
 		flightplan->current = flightplan->current->next;
 		result = true;
