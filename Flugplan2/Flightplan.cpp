@@ -46,12 +46,12 @@ void newFlight (TFlightplan * flightplan, TFlightdata * flightdata)//könnte flie
 	}
 	else
 	{
-		//neuen Flug ans ende anhängen
-		flightplan->last->next = createFlight(flightdata);
+		//neuen Flug erstellen und ans ende anhängen
+		setnextFlight(flightplan->last, createFlight(flightdata));
 		//current-Zeiger auf das (alte) ende setzen
 		flightplan->current = flightplan->last;
 		//last-zeiger weiter schieben
-		flightplan->last = flightplan->last->next; //besser dokumentieren
+		flightplan->last = getnextFlight(flightplan->current); //besser dokumentieren
 		
 		
 		//aktuellen Flug dem neuen als vorgänger setzten
@@ -66,8 +66,8 @@ void newFlight (TFlightplan * flightplan, TFlightdata * flightdata)//könnte flie
 
 void removeFlight (TFlightplan * flightplan) //muss überarbeitet werden
 {
-	TFlight * tempNext = flightplan->current->next;
-	TFlight * tempPrev = flightplan->current->prev;
+	TFlight * tempNext = getnextFlight(flightplan->current);
+	TFlight * tempPrev = getprevFlight(flightplan->current);
 	
 	if (tempNext)//prüfen
 		tempNext->prev = tempPrev;
@@ -86,13 +86,13 @@ void removeFlight (TFlightplan * flightplan) //muss überarbeitet werden
 	flightplan->count--;
 };
 
-void searchFlight (TFlightplan * flugplan, int flightnumber)//sollte
+void searchFlight (TFlightplan * flugplan, int flightnumber)
 {
 	flugplan->current = flugplan->first;
 	bool ende = false;
 	while (!ende && flugplan->current)
 	{
-		if (flugplan->current->data->number == flightnumber)
+		if (flugplan->current->data->number == flightnumber) //hier wird noch direkt auf daten von unter "classen" zu gegriffen
 			ende = true;
 		else
 			nextFlight(flugplan);
@@ -109,7 +109,7 @@ void outputFlight (TFlightplan * flightplan) //sollte gehen / warscheinlich noch
 	cout << flightplan->current->data->numberplate.c_str() << "\n";
 };
 
-void outputFlightPlan (TFlightplan * flightplan)//geht fliegen (endlosschleife) /not testet
+void outputFlightPlan (TFlightplan * flightplan)
 {
 	bool result;
 	cout << "Flugnr.\t" << "Flug Ziel\t" << "Zeit\t" << "Rollbahn\t" << "Pilot\t" << "Flugkennung\n";
@@ -132,7 +132,7 @@ bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet
 
 	if (getnextFlight(flightplan->current) != NULL)
 	{
-		flightplan->current = flightplan->current->next;
+		flightplan->current = getnextFlight(flightplan->current);
 		result = true;
 	}
 	else
@@ -143,11 +143,17 @@ bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet
 
 bool prevFlight (TFlightplan * flightplan)//muss überarbeitet werden /not testet
 {
-	if (flightplan->current->prev != NULL)
+	bool result = false;
+
+	if (getprevFlight(flightplan->current) != NULL)
 	{
-		flightplan->current = flightplan->current->prev;
+		flightplan->current = getprevFlight(flightplan->current);
+		result = true;
 	}
-	return 0;
+	else
+		result = false;
+
+	return result;
 }
 
 
