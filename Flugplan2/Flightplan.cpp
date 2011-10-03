@@ -109,6 +109,70 @@ void outputFlight (TFlightplan * flightplan) //sollte gehen / warscheinlich noch
 	cout << flightplan->current->data->numberplate.c_str() << "\n";
 };
 
+void exportFlightPlan (TFlightplan * flightplan){
+	ofstream exportFile, htmlFile, jsonFile;
+	int count = 0;
+	exportFile.open("export.txt");
+	htmlFile.open("export-html.html");
+	jsonFile.open("flightdata.json");
+	
+	exportFile << "Flugnr.\t" << "Flug Ziel\t" << "Zeit\t" << "Rollbahn\t" << "Pilot\t" << "Flugkennung\n";
+	
+	htmlFile << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
+	htmlFile << "<html><head><title>Flugdaten HTML Export</title></head><body><table border=\"1\"><tr>";
+	htmlFile << "<td>Flugnummer</td><td>Flug Ziel</td><td>Zeit</td><td>Rollbahn</td><td>Pilot</td><td>Flugkennung</td></tr>";
+
+	jsonFile << "{\"flightdata\":{\"count\":" << flightplan->count << "},";
+	jsonFile << "{\"flights\":";
+
+	if(flightplan->count != 0){
+		flightplan->current = flightplan->first;
+
+		do{
+			exportFile << flightplan->current->data->number << "\t";
+			exportFile << flightplan->current->data->destination.c_str() << "\t";
+			exportFile << flightplan->current->data->time.c_str() << "\t";
+			exportFile << flightplan->current->data->rollway << "\t";
+			exportFile << flightplan->current->data->pilot.c_str() << "\t";
+			exportFile << flightplan->current->data->numberplate.c_str() << "\n";
+			// html stuff
+			htmlFile << "<tr><td>" << flightplan->current->data->number << "</td>";
+			htmlFile << "<td>" << flightplan->current->data->destination.c_str() << "</td>";
+			htmlFile << "<td>" << flightplan->current->data->time.c_str() << "</td>";
+			htmlFile << "<td>" << flightplan->current->data->rollway << "</td>";
+			htmlFile << "<td>" << flightplan->current->data->pilot.c_str() << "</td>";
+			htmlFile << "<td>" << flightplan->current->data->numberplate.c_str() << "</td></tr>";
+			//json stuff
+			jsonFile << "{\"" << count << "\":{";
+			jsonFile << "\"number\":" << "\"" << flightplan->current->data->number << "\",";
+			jsonFile << "\"destination\":" << "\"" << flightplan->current->data->destination.c_str() << "\",";
+			jsonFile << "\"time\":" << "\"" << flightplan->current->data->time.c_str() << "\",";
+			jsonFile << "\"rollway\":" << "\"" << flightplan->current->data->rollway << "\",";
+			jsonFile << "\"pilot\":" << "\"" << flightplan->current->data->pilot.c_str() << "\",";
+			jsonFile << "\"numberplate\":" << "\"" << flightplan->current->data->numberplate.c_str() << "\"";
+
+			count = count + 1;
+
+			if(flightplan->count >= count){
+				jsonFile << "}";
+			}else{
+				jsonFile << "},";
+			}
+			
+			if(getnextFlight(flightplan->current)){
+				nextFlight(flightplan);
+			}
+		}while(getnextFlight(flightplan->current) != 0);	
+	}
+	jsonFile << "}}}}";
+	htmlFile << "</table></body></html>";
+
+	htmlFile.close();
+	jsonFile.close();
+	exportFile.close();
+
+}
+
 void outputFlightPlan (TFlightplan * flightplan)
 {
 	bool result;

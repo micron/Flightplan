@@ -58,7 +58,12 @@ int main (void)
 				else
 					backToMenue(true);
 				break;
-			case '5': break;
+			case '5': 
+				system("cls");
+				cout << "Fluege wurden exportiert";
+				exportFlightPlan(flightplan);
+				backToMenue(true);
+				break;
 			case '6': break;
 			case '7': break;
 			case '8': break;

@@ -5,15 +5,15 @@ void mainMenue (void)
 {
 	system("cls");
 	cout << "Flugplanverwaltung - Copyright 2011\n";
-	cout << "          by Pascal Ott and Miron Ogrodovice\n\n";
+	cout << "          by Pascal Ott and Miron Ogrodowicz\n\n";
 	cout << "============================================\n";
 	cout << "(1)\t aktuellen Flugplan ausgeben\n";
 	cout << "--------------------------------------------\n";
 	cout << "(2)\t neuen Flug anlegen\n";
 	cout << "(3)\t einen Flug aendern\n";
 	cout << "(4)\t einen Flug loeschen\n";
+	cout << "(5)\t Flugplan Exportieren\n";
 	cout << "--------------------------------------------\n";
-	//cout << "(5)\t neuen Flug anlegen\n";
 	//cout << "(6)\t neuen Flug anlegen\n";
 	//cout << "(7)\t neuen Flug anlegen\n";
 	cout << "(9)\t Flugplanverwaltung beenden\n";

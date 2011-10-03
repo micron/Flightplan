@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include "Flight.h"
 
 using namespace std;
@@ -25,6 +26,7 @@ void		  searchFlight		(TFlightplan * flightplan,
 
 void		  outputFlight		(TFlightplan * flightplan);
 void		  outputFlightPlan	(TFlightplan * flightplan);
+void		  exportFlightPlan  (TFlightplan * flightplan);
 bool		  nextFlight		(TFlightplan * flightplan);
 bool		  prevFlight		(TFlightplan * flightplan);
 //void		  cleanup			(TFlightplan * flightplan);
