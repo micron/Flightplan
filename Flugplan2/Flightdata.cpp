@@ -25,7 +25,7 @@ void deleteFlightdata (TFlightdata * flightdata)
 	}
 	catch (char * str )
 	{
-		cout << "Es ist folgender Fehler beim Löschen von Flugdaten aufgetreten: \n" << str << endl;
+		//cout << "Es ist folgender Fehler beim Löschen von Flugdaten aufgetreten: \n" << str << endl;
 	}
 }
 

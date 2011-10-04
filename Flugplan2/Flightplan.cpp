@@ -175,7 +175,7 @@ void exportFlightPlan (TFlightplan * flightplan){
 
 void outputFlightPlan (TFlightplan * flightplan)
 {
-	bool result;
+	bool ende = false;
 	cout << "Flugnr.\t" << "Flug Ziel\t" << "Zeit\t" << "Rollbahn\t" << "Pilot\t" << "Flugkennung\n";
 	
 	if (flightplan->count != 0)
@@ -186,7 +186,9 @@ void outputFlightPlan (TFlightplan * flightplan)
 			outputFlight (flightplan);
 			if (getnextFlight(flightplan->current))
 				nextFlight (flightplan);
-		}while (getnextFlight(flightplan->current) != 0);
+			else
+				ende = true;
+		}while (!ende);
 	}
 };
 
