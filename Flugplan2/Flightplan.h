@@ -24,9 +24,6 @@ void		  searchFlight		(TFlightplan * flightplan,
 
 //void		  changeFlight		(TFlightplan * flightplan);
 
-void		  outputFlight		(TFlightplan * flightplan);
-void		  outputFlightPlan	(TFlightplan * flightplan);
-void		  exportFlightPlan  (TFlightplan * flightplan);
 bool		  nextFlight		(TFlightplan * flightplan);
 bool		  prevFlight		(TFlightplan * flightplan);
 //void		  cleanup			(TFlightplan * flightplan);
