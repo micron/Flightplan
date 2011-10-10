@@ -78,12 +78,13 @@ string outputFlight (TFlightplan * flightplan) //sollte gehen / warscheinlich no
 };
 
 void exportFlightPlan (TFlightplan * flightplan){
-	ofstream exportFile, htmlFile, jsonFile;
+	ofstream exportFile, htmlFile, jsonFile, jsFile;
 	int count = 0;
 	bool ende = false;
 	exportFile.open("export.txt");
 	htmlFile.open("export-html.html");
 	jsonFile.open("flightdata.json");
+	jsFile.open("flightdata.js");
 	
 	exportFile << "Flugnr.\t" << "Flug Ziel\t" << "Zeit\t" << "Rollbahn\t" << "Pilot\t" << "Flugkennung\n";
 	
@@ -93,6 +94,8 @@ void exportFlightPlan (TFlightplan * flightplan){
 
 	jsonFile << "{\"flightdata\":{\"count\":" << flightplan->count << "},";
 	jsonFile << "{\"flights\":";
+
+	jsFile << "var flights = [];";
 
 	if(flightplan->count != 0){
 		flightplan->current = flightplan->first;
@@ -115,6 +118,14 @@ void exportFlightPlan (TFlightplan * flightplan){
 			jsonFile << "\"pilot\":" << "\"" << flightplan->current->data->pilot.c_str() << "\",";
 			jsonFile << "\"numberplate\":" << "\"" << flightplan->current->data->numberplate.c_str() << "\"";
 
+			
+			jsFile << "flights.push({number:'" << flightplan->current->data->number << "',";
+			jsFile << "destination:'" << flightplan->current->data->destination.c_str() << "',";
+			jsFile << "time:'" << flightplan->current->data->time.c_str() << "',";
+			jsFile << "rollway:'" << flightplan->current->data->rollway << "',";
+			jsFile << "pilot:'" << flightplan->current->data->pilot.c_str() << "',";
+			jsFile << "numberplate:'" << flightplan->current->data->numberplate.c_str() << "'});";
+
 			count = count + 1;
 
 			if(flightplan->count >= count){
@@ -136,6 +147,7 @@ void exportFlightPlan (TFlightplan * flightplan){
 
 	htmlFile.close();
 	jsonFile.close();
+	jsFile.close();
 	exportFile.close();
 
 };
