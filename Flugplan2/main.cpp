@@ -79,11 +79,6 @@ int main (void)
 	return 0;
 }
 
-int htmlExport (void)
-{
-	return 0;
-}
-
 void pause (void)
 {
 	

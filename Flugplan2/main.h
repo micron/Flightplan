@@ -11,5 +11,4 @@
 using namespace std;
 
 
-int		htmlExport	(void);
 void	pause		(void);
