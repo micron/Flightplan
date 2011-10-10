@@ -59,7 +59,20 @@ void inputFlightdata (TFlightdata * tempFlightdata)
 
 };
 
-string outputFlight (TFlightplan * flightplan) //sollte gehen / warscheinlich noch in der falschen datei
+void readinFlightplan()
+{
+
+
+}
+
+void readinFlight (ifstream * dateistream)
+{
+	
+
+};
+
+
+string outputFlight (TFlightplan * flightplan) //sollte gehen
 {
 	string out = "";
 	ostringstream temp;
