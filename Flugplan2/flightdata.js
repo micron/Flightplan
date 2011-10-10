@@ -1,0 +1,1 @@
+var flights = [];flights.push({number:'1',destination:'kambodja',time:'12:22',rollway:'1',pilot:'hugo',numberplate:'ASDF'});flights.push({number:'2',destination:'warsaw',time:'16:33',rollway:'4',pilot:'hakan',numberplate:'PL'});
