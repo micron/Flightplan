@@ -64,7 +64,12 @@ int main (void)
 				exportFlightPlan(flightplan);
 				backToMenue(true);
 				break;
-			case '6': break;
+			case '6':
+				system("cls");
+				importFlightplan(flightplan);
+				cout << "Fluege wurden importiert";
+				backToMenue(true);
+				break;
 			case '7': break;
 			case '8': break;
 			case '9': ende = true; break;

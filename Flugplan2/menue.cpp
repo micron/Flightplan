@@ -12,9 +12,10 @@ void mainMenue (void)
 	cout << "(2)\t neuen Flug anlegen\n";
 	cout << "(3)\t einen Flug aendern\n";
 	cout << "(4)\t einen Flug loeschen\n";
-	cout << "(5)\t Flugplan Exportieren\n";
 	cout << "--------------------------------------------\n";
-	//cout << "(6)\t neuen Flug anlegen\n";
+	cout << "(5)\t Flugplan exportieren\n";
+	cout << "(6)\t Flugplan importieren\n";
+	cout << "--------------------------------------------\n";
 	//cout << "(7)\t neuen Flug anlegen\n";
 	cout << "(9)\t Flugplanverwaltung beenden\n";
 	cout << "============================================\n";
@@ -59,16 +60,61 @@ void inputFlightdata (TFlightdata * tempFlightdata)
 
 };
 
-void readinFlightplan()
+void importFlightplan(TFlightplan * flightplan)
 {
+	ifstream tempInput;
+
+	tempInput.open("export.txt");
+
+	TFlightdata * tempFlightdata = 0;
 
 
+	string temp;
+	getline(tempInput, temp);
+
+	while (!tempInput.eof())
+		newFlight(flightplan, importFlight(&tempInput));
 }
 
-void readinFlight (ifstream * dateistream)
+string readSubString (string * readString)
 {
-	
+	string tempString = "";
+	int e = 0;
 
+	e = (*readString).find("\t", 0);
+	tempString = (*readString).substr(0, e);
+	(*readString).erase(0, e+1);
+
+	return tempString;
+}
+
+TFlightdata * importFlight (ifstream  * tempInput)
+{
+	TFlightdata * tempFlightdata = createFlightdata();
+
+	string tempString, readString = "";
+
+	getline(*tempInput, readString);
+
+	tempString = readSubString (&readString);
+	tempFlightdata->number = atoi(tempString.c_str());
+
+	tempString = readSubString (&readString);
+	tempFlightdata->destination = tempString;
+
+	tempString = readSubString (&readString);
+	tempFlightdata->time = tempString;
+
+	tempString = readSubString (&readString);
+	tempFlightdata->rollway = atoi(tempString.c_str());
+
+	tempString = readSubString (&readString);
+	tempFlightdata->pilot = tempString;
+	
+	tempString = readSubString (&readString);
+	tempFlightdata->numberplate = tempString;
+
+	return tempFlightdata;
 };
 
 
@@ -85,7 +131,10 @@ string outputFlight (TFlightplan * flightplan) //sollte gehen
 	temp << flightplan->current->data->rollway;
 	out += temp.str() + '\t';
 	out += flightplan->current->data->pilot + '\t';
-	out += flightplan->current->data->numberplate + '\n';
+	out += flightplan->current->data->numberplate;
+	
+	if (flightplan->current != flightplan->last)
+		out += '\n';
 
 	return out;
 };
