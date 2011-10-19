@@ -13,6 +13,7 @@ void mainMenue (void)
 	cout << "(3)\t einen Flug aendern\n";
 	cout << "(4)\t einen Flug loeschen\n";
 	cout << "(a)\t Fluege tauschen\n";
+	cout << "(b)\t Fluege Sortieren\n";
 	cout << "--------------------------------------------\n";
 	cout << "(5)\t Flugplan exportieren\n";
 	cout << "(6)\t Flugplan importieren\n";

@@ -21,7 +21,9 @@ void		  newFlight			(TFlightplan * flightplan, TFlightdata * flightdata);
 void		  removeFlight		(TFlightplan * flightplan);
 void		  searchFlight		(TFlightplan * flightplan,
 								 int		   flightnumber);
-void switchFLights (TFlightplan * flugplan, int firstFlight, int secondFlight);
+void switchFlights (TFlightplan * flugplan, int firstFlight, int secondFlight);
+void sortFlightplan(TFlightplan * flugplan);
+void sortFlight(TFlightplan * flugplan, TFlight * flug, TFlight  *(&tempFlug));
 
 //void		  changeFlight		(TFlightplan * flightplan);
 

@@ -96,10 +96,11 @@ void searchFlight (TFlightplan * flugplan, int flightnumber)
 			ende = true;
 		else
 			nextFlight(flugplan);
+
 	};
 };
 
-void switchFLights (TFlightplan * flugplan, int firstFlight, int secondFlight){
+void switchFlights (TFlightplan * flugplan, int firstFlight, int secondFlight){
 	TFlightdata * tempFlightData;
 	TFlight * tempFlight1;
 	TFlight * tempFlight2;
@@ -121,6 +122,31 @@ void switchFLights (TFlightplan * flugplan, int firstFlight, int secondFlight){
 	tempFlight1->data = tempFlight2->data;
 
 	tempFlight2->data = tempFlightData;
+}
+
+void sortFlightplan (TFlightplan * flugplan)
+{
+	flugplan->current = flugplan->first;
+
+	TFlight * flug = flugplan->first;
+	TFlight * tempFlug;
+
+	while (getnextFlight(flug) != NULL){
+		tempFlug = flug;
+		sortFlight(flugplan, flug, tempFlug);
+		flug = flug->next;
+	}
+}
+
+void sortFlight(TFlightplan * flugplan, TFlight * flug, TFlight * (&tempFlug))
+{
+	while(getnextFlight(tempFlug) != NULL){
+		tempFlug = getnextFlight(tempFlug);
+		if(flug->data->number < tempFlug->data->number){
+			switchFlights(flugplan, flug->data->number, tempFlug->data->number);
+		}
+		sortFlight(flugplan, flug, tempFlug);
+	}
 }
 
 bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet

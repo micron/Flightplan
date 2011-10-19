@@ -68,10 +68,16 @@ int main (void)
 				cin >> firstFlightNumber;
 				cout << "Bitte die zweite Flugnummer eingeben: ";
 				cin >> secondFlightNumber;
-				switchFLights(flightplan, firstFlightNumber, secondFlightNumber);
+				switchFlights(flightplan, firstFlightNumber, secondFlightNumber);
 				
 				backToMenue(true);
 				break;
+			case 'b':
+				system("cls");
+				sortFlightplan(flightplan);
+				backToMenue(true);
+				break;
+			
 			case '5': 
 				system("cls");
 				cout << "Fluege wurden exportiert";
