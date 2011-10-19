@@ -99,6 +99,30 @@ void searchFlight (TFlightplan * flugplan, int flightnumber)
 	};
 };
 
+void switchFLights (TFlightplan * flugplan, int firstFlight, int secondFlight){
+	TFlightdata * tempFlightData;
+	TFlight * tempFlight1;
+	TFlight * tempFlight2;
+
+	flugplan->current = flugplan->first;
+
+	// search the first flight
+	searchFlight(flugplan, firstFlight);
+
+	tempFlight1 = flugplan->current;
+
+	// search the second flight
+	searchFlight(flugplan, secondFlight);
+
+	tempFlight2 = flugplan->current;
+
+	tempFlightData = tempFlight1->data;
+
+	tempFlight1->data = tempFlight2->data;
+
+	tempFlight2->data = tempFlightData;
+}
+
 bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet
 {
 	bool result = false;

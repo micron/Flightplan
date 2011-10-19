@@ -19,6 +19,9 @@ int main (void)
 		if (_kbhit())
 		{
 			int flightnumber = 0;
+			// flightnumbers to be switched
+			int firstFlightNumber = 0;
+			int secondFlightNumber = 0;
 			char str = _getch();
 			switch (str)
 			{
@@ -57,6 +60,17 @@ int main (void)
 				}
 				else
 					backToMenue(true);
+				break;
+			case 'a':
+				system("cls");
+				outputFlightPlan(flightplan);
+				cout << "Bitte die erste Flugnummer eingeben: ";
+				cin >> firstFlightNumber;
+				cout << "Bitte die zweite Flugnummer eingeben: ";
+				cin >> secondFlightNumber;
+				switchFLights(flightplan, firstFlightNumber, secondFlightNumber);
+				
+				backToMenue(true);
 				break;
 			case '5': 
 				system("cls");
