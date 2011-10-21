@@ -23,6 +23,29 @@ void mainMenue (void)
 	cout << "============================================\n";
 }
 
+void sortingMenu (void)
+{
+	cout << "============================================\n";
+	cout << "aufsteigend:\n";
+	cout << "(1)  Flugnummer\n";
+	cout << "(2)  Flugziel\n";
+	cout << "(3)  Zeit\n";
+	cout << "(4)  Rollbahn\n";
+	cout << "(5)  Pilot\n";
+	cout << "(6)  Flugkennung\n";
+	cout << "--------------------------------------------\n";
+	cout << "absteigend:\n";
+	cout << "(7)  Flugnummer\n";
+	cout << "(8)  Flugziel\n";
+	cout << "(9)  Zeit\n";
+	cout << "(10) Rollbahn\n";
+	cout << "(11) Pilot\n";
+	cout << "(12) Flugkennung\n";
+	cout << "============================================\n\n";
+
+	cout << "Bitte sortieroption eingeben: ";
+}
+
 void inputFlightdata (TFlightdata * tempFlightdata)
 {
 	int tempInt = 0;

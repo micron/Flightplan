@@ -9,6 +9,7 @@
 using namespace std;
 
 void	mainMenue		(void);
+void	sortingMenu		(void);
 void	inputFlightdata	(TFlightdata * tempFlightdata);
 TFlightdata	* importFlight	(ifstream * input);
 void	importFlightplan(TFlightplan * flightplan);
