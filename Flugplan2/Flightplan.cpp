@@ -7,7 +7,7 @@ TFlightplan * createFlightplan (void) //geht /not tested
 	flightplan->first = NULL;
 	flightplan->current = NULL;
 	flightplan->last = NULL;
-	
+
 	return flightplan;
 }
 
@@ -25,7 +25,7 @@ void deleteFlightplan (TFlightplan * flightplan)//könnte fliegen gehen / not tes
 			tempFlight = flightplan->current;
 			next = nextFlight(flightplan);			
 			deleteFlight(tempFlight);
-			
+
 		}while (next);
 	}
 	delete flightplan;
@@ -52,8 +52,8 @@ void newFlight (TFlightplan * flightplan, TFlightdata * flightdata)//könnte flie
 		flightplan->current = flightplan->last;
 		//last-zeiger weiter schieben
 		flightplan->last = getnextFlight(flightplan->current); //besser dokumentieren
-		
-		
+
+
 		//aktuellen Flug dem neuen als vorgänger setzten
 		flightplan->last->prev = flightplan->current;
 		//current-Zeiger auf das (neue) ende setzen
@@ -68,7 +68,7 @@ void removeFlight (TFlightplan * flightplan) //muss überarbeitet werden
 {
 	TFlight * tempNext = getnextFlight(flightplan->current);
 	TFlight * tempPrev = getprevFlight(flightplan->current);
-	
+
 	if (tempNext)//prüfen
 		tempNext->prev = tempPrev;
 	if (tempPrev)//prüfen
@@ -124,7 +124,7 @@ void switchFlights (TFlightplan * flugplan, int firstFlight, int secondFlight){
 	tempFlight2->data = tempFlightData;
 }
 
-void sortFlightplan (TFlightplan * flugplan)
+void sortFlightplan (TFlightplan * flugplan, int sortBy)
 {
 	flugplan->current = flugplan->first;
 
@@ -133,19 +133,70 @@ void sortFlightplan (TFlightplan * flugplan)
 
 	while (getnextFlight(flug) != NULL){
 		tempFlug = flug;
-		sortFlight(flugplan, flug, tempFlug);
+		sortFlight(flugplan, flug, tempFlug, sortBy);
 		flug = flug->next;
 	}
 }
 
-void sortFlight(TFlightplan * flugplan, TFlight * flug, TFlight * (&tempFlug))
+void sortFlight(TFlightplan * flugplan, TFlight * flug, TFlight * (&tempFlug), int sortBy)
 {
+	bool switching = false;
 	while(getnextFlight(tempFlug) != NULL){
 		tempFlug = getnextFlight(tempFlug);
-		if(flug->data->number < tempFlug->data->number){
-			switchFlights(flugplan, flug->data->number, tempFlug->data->number);
+		switch (sortBy)
+		{
+		case 1:
+			if(flug->data->number > tempFlug->data->number)
+				switching = true;
+			break;
+		case 2:
+			if(flug->data->destination.compare(tempFlug->data->destination) == 1)
+				switching = true;
+			break;
+		case 3:
+			if(flug->data->time.compare(tempFlug->data->time) == 1)
+				switching = true;
+			break;
+		case 4:
+			if(flug->data->rollway > tempFlug->data->rollway)
+				switching = true;
+			break;
+		case 5:
+			if(flug->data->pilot.compare(tempFlug->data->pilot) == 1)
+				switching = true;
+			break;
+		case 6:
+			if(flug->data->numberplate.compare(tempFlug->data->numberplate) == 1)
+				switching = true;
+			break;
+		case 7:
+			if(flug->data->number < tempFlug->data->number)
+				switching = true;
+			break;
+		case 8:
+			if(flug->data->destination.compare(tempFlug->data->destination) == -1)
+				switching = true;
+			break;
+		case 9:
+			if(flug->data->time.compare(tempFlug->data->time) == -1)
+				switching = true;
+			break;
+		case 10:
+			if(flug->data->rollway < tempFlug->data->rollway)
+				switching = true;
+			break;
+		case 11:
+			if(flug->data->pilot.compare(tempFlug->data->pilot) == -1)
+				switching = true;
+			break;
+		case 12:
+			if(flug->data->numberplate.compare(tempFlug->data->numberplate) == -1)
+				switching = true;
+			break;
 		}
-		sortFlight(flugplan, flug, tempFlug);
+		if (switching)
+			switchFlights(flugplan, flug->data->number, tempFlug->data->number);
+		sortFlight(flugplan, flug, tempFlug, sortBy);
 	}
 }
 
