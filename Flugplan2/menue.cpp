@@ -34,7 +34,7 @@ void inputFlightdata (TFlightdata * tempFlightdata)
 	if (tempInt != 0)
 		tempFlightdata->number = tempInt;
 
-	cout << "Flug Ziel (" << tempFlightdata->destination << "): ";
+	cout << "Flugziel (" << tempFlightdata->destination << "): ";
 	getline(cin, tempString);
 	if (tempString != "")
 		tempFlightdata->destination = tempString;
