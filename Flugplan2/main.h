@@ -10,5 +10,4 @@
 
 using namespace std;
 
-
 void	pause		(void);

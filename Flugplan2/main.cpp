@@ -8,7 +8,6 @@ int main (void)
 	TFlightplan * flightplan = createFlightplan();
 	TFlightdata * tempFlightdata = NULL;
 
-
 	bool ende = false;
 
 	mainMenue ();
@@ -22,6 +21,9 @@ int main (void)
 			// flightnumbers to be switched
 			int firstFlightNumber = 0;
 			int secondFlightNumber = 0;
+			// sortby Option
+			int sortBy;
+
 			char str = _getch();
 			switch (str)
 			{
@@ -74,10 +76,11 @@ int main (void)
 				break;
 			case 'b':
 				system("cls");
-				sortFlightplan(flightplan);
+				sortingMenu();
+				cin >> sortBy;
+				sortFlightplan(flightplan, sortBy);
 				backToMenue(true);
 				break;
-			
 			case '5': 
 				system("cls");
 				cout << "Fluege wurden exportiert";
