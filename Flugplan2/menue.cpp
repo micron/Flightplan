@@ -17,6 +17,7 @@ void mainMenue (void)
 	cout << "--------------------------------------------\n";
 	cout << "(5)\t Flugplan exportieren\n";
 	cout << "(6)\t Flugplan importieren\n";
+	cout << "(7)\t Flugplan leeren\n";
 	cout << "--------------------------------------------\n";
 	//cout << "(7)\t neuen Flug anlegen\n";
 	cout << "(9)\t Flugplanverwaltung beenden\n";

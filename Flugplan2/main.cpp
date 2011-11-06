@@ -93,7 +93,12 @@ int main (void)
 				cout << "Fluege wurden importiert";
 				backToMenue(true);
 				break;
-			case '7': break;
+			case '7': 
+				system("cls");
+				deleteFlightplan(flightplan, false);
+				cout << "Flugplan wurde geloescht" << endl;
+				backToMenue(true);
+				break;
 			case '8': break;
 			case '9': ende = true; break;
 			}
@@ -103,7 +108,7 @@ int main (void)
 
 	//pause();
 
-	deleteFlightplan(flightplan);
+	deleteFlightplan(flightplan, true);
 	return 0;
 }
 
