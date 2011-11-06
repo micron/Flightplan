@@ -11,7 +11,7 @@ TFlightplan * createFlightplan (void) //geht /not tested
 	return flightplan;
 }
 
-void deleteFlightplan (TFlightplan * flightplan)//könnte fliegen gehen / not tested
+void deleteFlightplan (TFlightplan * flightplan, bool hardDelete)//könnte fliegen gehen / not tested
 {
 	bool next = false;
 	TFlight * tempFlight;
@@ -28,11 +28,21 @@ void deleteFlightplan (TFlightplan * flightplan)//könnte fliegen gehen / not tes
 
 		}while (next);
 	}
-	delete flightplan;
+	if(hardDelete){
+		delete flightplan;
+	}else{
+		flightplan->count = 0;
+		flightplan->first = NULL;
+		flightplan->current = NULL;
+		flightplan->last = NULL;
+	}
+	
 }
 
 void newFlight (TFlightplan * flightplan, TFlightdata * flightdata)//könnte fliegen gehen /not testet
 {
+
+
 	//falls noch kein Flugvorhanden ist
 	if (!flightplan->count)
 	{
@@ -46,18 +56,23 @@ void newFlight (TFlightplan * flightplan, TFlightdata * flightdata)//könnte flie
 	}
 	else
 	{
-		//neuen Flug erstellen und ans ende anhängen
-		setnextFlight(flightplan->last, createFlight(flightdata));
-		//current-Zeiger auf das (alte) ende setzen
-		flightplan->current = flightplan->last;
-		//last-zeiger weiter schieben
-		flightplan->last = getnextFlight(flightplan->current); //besser dokumentieren
+		if(!searchFlight(flightplan, flightdata->number)){
+			//neuen Flug erstellen und ans ende anhängen
+			setnextFlight(flightplan->last, createFlight(flightdata));
+			//current-Zeiger auf das (alte) ende setzen
+			flightplan->current = flightplan->last;
+			//last-zeiger weiter schieben
+			flightplan->last = getnextFlight(flightplan->current); //besser dokumentieren
 
 
-		//aktuellen Flug dem neuen als vorgänger setzten
-		flightplan->last->prev = flightplan->current;
-		//current-Zeiger auf das (neue) ende setzen
-		flightplan->current = flightplan->last;
+			//aktuellen Flug dem neuen als vorgänger setzten
+			flightplan->last->prev = flightplan->current;
+			//current-Zeiger auf das (neue) ende setzen
+			flightplan->current = flightplan->last;
+		}else{
+			cout << "Flugnummer " << flightdata->number << " ist bereits vorhanden und konnte deshalb nicht importiert werden" << endl;
+			deleteFlightdata(flightdata);
+		}
 	}
 
 	//Fluganzahl erhöhen
@@ -86,18 +101,21 @@ void removeFlight (TFlightplan * flightplan) //muss überarbeitet werden
 	flightplan->count--;
 };
 
-void searchFlight (TFlightplan * flugplan, int flightnumber)
+bool searchFlight (TFlightplan * flugplan, int flightnumber)
 {
 	flugplan->current = flugplan->first;
 	bool ende = false;
-	while (!ende && flugplan->current)
+	bool foundNextFlight = true;
+	while (!ende && flugplan->current && foundNextFlight)
 	{
 		if (flugplan->current->data->number == flightnumber) //hier wird noch direkt auf daten von unter "classen" zu gegriffen
 			ende = true;
 		else
-			nextFlight(flugplan);
+			foundNextFlight = nextFlight(flugplan);
 
 	};
+
+	return ende;
 };
 
 void switchFlights (TFlightplan * flugplan, int firstFlight, int secondFlight){
