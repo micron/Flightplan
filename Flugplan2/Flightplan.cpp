@@ -1,230 +1,225 @@
 #include "Flightplan.h"
 
-TFlightplan * createFlightplan (void) //geht /not tested
+TFlightplan::TFlightplan (void) //geht /not tested
 {
-	TFlightplan * flightplan = new TFlightplan;
-	flightplan->count = 0;
-	flightplan->first = NULL;
-	flightplan->current = NULL;
-	flightplan->last = NULL;
-
-	return flightplan;
+	count = 0;
+	first = NULL;
+	current = NULL;
+	last = NULL;
 }
 
-void deleteFlightplan (TFlightplan * flightplan, bool hardDelete)//könnte fliegen gehen / not tested
+TFlightplan::~TFlightplan ()//könnte fliegen gehen / not tested
+{
+	clear();
+}
+
+void TFlightplan::clear (void)//könnte fliegen gehen / not tested
 {
 	bool next = false;
 	TFlight * tempFlight;
 
-	if (flightplan->count != 0)
+	if (count != 0)
 	{
-		flightplan->current = flightplan->first;
+		current = first;
 
 		do
 		{
-			tempFlight = flightplan->current;
-			next = nextFlight(flightplan);			
-			deleteFlight(tempFlight);
+			tempFlight = current;
+			next = nextFlight();			
+			delete tempFlight;
 
 		}while (next);
 	}
-	if(hardDelete){
-		delete flightplan;
-	}else{
-		flightplan->count = 0;
-		flightplan->first = NULL;
-		flightplan->current = NULL;
-		flightplan->last = NULL;
-	}
+	count = 0;
+	first = NULL;
+	current = NULL;
+	last = NULL;
+	
 	
 }
-
-void newFlight (TFlightplan * flightplan, TFlightdata * flightdata)//könnte fliegen gehen /not testet
+void TFlightplan::newFlight (TFlightdata * flightdata)//könnte fliegen gehen /not testet
 {
-
-
 	//falls noch kein Flugvorhanden ist
-	if (!flightplan->count)
+	if (!count)
 	{
 		//neuen Flug erstellen
-		flightplan->first = createFlight(flightdata);
-
+		first = new TFlight(flightdata);
 		//neuen Flug als aktuellen Flug definieren
-		flightplan->current = flightplan->first;
+		current = first;
 		//last-Zeiger setzten
-		flightplan->last = flightplan->first;
+		last = first;
 	}
 	else
 	{
-		if(!searchFlight(flightplan, flightdata->number)){
+		if(!searchFlight(flightdata->getNumber())){
 			//neuen Flug erstellen und ans ende anhängen
-			setnextFlight(flightplan->last, createFlight(flightdata));
+			last->setnextFlight(new TFlight(flightdata));
 			//current-Zeiger auf das (alte) ende setzen
-			flightplan->current = flightplan->last;
+			current = last;
 			//last-zeiger weiter schieben
-			flightplan->last = getnextFlight(flightplan->current); //besser dokumentieren
+			last = current->getnextFlight(); //besser dokumentieren
 
 
 			//aktuellen Flug dem neuen als vorgänger setzten
-			flightplan->last->prev = flightplan->current;
+			last->setprevFlight(current);
 			//current-Zeiger auf das (neue) ende setzen
-			flightplan->current = flightplan->last;
+			current = last;
 		}else{
-			cout << "Flugnummer " << flightdata->number << " ist bereits vorhanden und konnte deshalb nicht importiert werden" << endl;
-			deleteFlightdata(flightdata);
+			cout << "Flugnummer " << flightdata->getNumber() << " ist bereits vorhanden und konnte deshalb nicht importiert werden" << endl;
+			delete flightdata;
 		}
 	}
 
 	//Fluganzahl erhöhen
-	flightplan->count++;
+	count++;
 }
 
-void removeFlight (TFlightplan * flightplan) //muss überarbeitet werden
+void TFlightplan::removeFlight () //muss überarbeitet werden
 {
-	TFlight * tempNext = getnextFlight(flightplan->current);
-	TFlight * tempPrev = getprevFlight(flightplan->current);
+	TFlight * tempNext = current->getnextFlight();
+	TFlight * tempPrev = current->getprevFlight();
 
 	if (tempNext)//prüfen
-		tempNext->prev = tempPrev;
+		tempNext->setprevFlight(tempPrev);
 	if (tempPrev)//prüfen
-		tempPrev->next = tempNext;
+		tempPrev->setnextFlight(tempPrev);
 	// wenn es des letzte existierende element in der liste ist, setze Head auf NULL
 	else if (!tempNext && !tempPrev)//überarbeiten
-		flightplan->first = NULL;
+		first = NULL;
 	// wenn der erste flug in der Liste gelöscht wird, wird Flightplan.next auf das neue erste element gesetzt
 	else 
-		flightplan->first = tempNext; // überprüfen.....
+		first = tempNext; // überprüfen.....
 
 	// Flug löschen lassen
-	deleteFlight(flightplan->current); //prüfen, current zeigt danach ins nirvana
+	delete current; //prüfen, current zeigt danach ins nirvana
 
-	flightplan->count--;
+	count--;
 };
 
-bool searchFlight (TFlightplan * flugplan, int flightnumber)
+bool TFlightplan::searchFlight (int flightnumber)
 {
-	flugplan->current = flugplan->first;
+	current = first;
 	bool ende = false;
 	bool foundNextFlight = true;
-	while (!ende && flugplan->current && foundNextFlight)
+	while (!ende && current && foundNextFlight)
 	{
-		if (flugplan->current->data->number == flightnumber) //hier wird noch direkt auf daten von unter "classen" zu gegriffen
+		if (current->getFlightdata()->getNumber() == flightnumber) //hier wird noch direkt auf daten von unter "classen" zu gegriffen
 			ende = true;
 		else
-			foundNextFlight = nextFlight(flugplan);
+			foundNextFlight = nextFlight();
 
 	};
 
 	return ende;
 };
 
-void switchFlights (TFlightplan * flugplan, int firstFlight, int secondFlight){
+void TFlightplan::switchFlights (int firstFlight, int secondFlight){
 	TFlightdata * tempFlightData;
 	TFlight * tempFlight1;
 	TFlight * tempFlight2;
 
-	flugplan->current = flugplan->first;
+	current = first;
 
 	// search the first flight
-	searchFlight(flugplan, firstFlight);
+	searchFlight(firstFlight);
 
-	tempFlight1 = flugplan->current;
+	tempFlight1 = current;
 
 	// search the second flight
-	searchFlight(flugplan, secondFlight);
+	searchFlight(secondFlight);
 
-	tempFlight2 = flugplan->current;
+	tempFlight2 = current;
 
-	tempFlightData = tempFlight1->data;
+	tempFlightData = tempFlight1->getFlightdata();
 
-	tempFlight1->data = tempFlight2->data;
+	tempFlight1->setFlightdata(tempFlight2->getFlightdata());
 
-	tempFlight2->data = tempFlightData;
+	tempFlight2->setFlightdata(tempFlightData);
 }
 
-void sortFlightplan (TFlightplan * flugplan, int sortBy)
+void TFlightplan::sortFlightplan (int sortBy)
 {
-	flugplan->current = flugplan->first;
+	current = first;
 
-	TFlight * flug = flugplan->first;
+	TFlight * flug = first;
 	TFlight * tempFlug;
 
-	while (getnextFlight(flug) != NULL){
+	while (flug->getnextFlight() != NULL){
 		tempFlug = flug;
-		sortFlight(flugplan, flug, tempFlug, sortBy);
-		flug = flug->next;
+		sortFlight(flug, tempFlug, sortBy);
+		flug = flug->getnextFlight();
 	}
 }
 
-void sortFlight(TFlightplan * flugplan, TFlight * flug, TFlight * (&tempFlug), int sortBy)
+void TFlightplan::sortFlight(TFlight * flug, TFlight * (&tempFlug), int sortBy)
 {
 	bool switching = false;
-	while(getnextFlight(tempFlug) != NULL){
-		tempFlug = getnextFlight(tempFlug);
+	while(tempFlug->getnextFlight() != NULL){
+		tempFlug = tempFlug->getnextFlight();
 		switch (sortBy)
 		{
 		case 1:
-			if(flug->data->number > tempFlug->data->number)
+			if(flug->getFlightdata()->getNumber() > tempFlug->getFlightdata()->getNumber())
 				switching = true;
 			break;
 		case 2:
-			if(flug->data->destination.compare(tempFlug->data->destination) == 1)
+			if(flug->getFlightdata()->getDestination().compare(tempFlug->getFlightdata()->getDestination()) == 1)
 				switching = true;
 			break;
 		case 3:
-			if(flug->data->time.compare(tempFlug->data->time) == 1)
+			if(flug->getFlightdata()->getTime().compare(tempFlug->getFlightdata()->getTime()) == 1)
 				switching = true;
 			break;
 		case 4:
-			if(flug->data->rollway > tempFlug->data->rollway)
+			if(flug->getFlightdata()->getRollway() > tempFlug->getFlightdata()->getRollway())
 				switching = true;
 			break;
 		case 5:
-			if(flug->data->pilot.compare(tempFlug->data->pilot) == 1)
+			if(flug->getFlightdata()->getPilot().compare(tempFlug->getFlightdata()->getPilot()) == 1)
 				switching = true;
 			break;
 		case 6:
-			if(flug->data->numberplate.compare(tempFlug->data->numberplate) == 1)
+			if(flug->getFlightdata()->getNumberplate().compare(tempFlug->getFlightdata()->getNumberplate()) == 1)
 				switching = true;
 			break;
 		case 7:
-			if(flug->data->number < tempFlug->data->number)
+			if(flug->getFlightdata()->getNumber() < tempFlug->getFlightdata()->getNumber())
 				switching = true;
 			break;
 		case 8:
-			if(flug->data->destination.compare(tempFlug->data->destination) == -1)
+			if(flug->getFlightdata()->getDestination().compare(tempFlug->getFlightdata()->getDestination()) == -1)
 				switching = true;
 			break;
 		case 9:
-			if(flug->data->time.compare(tempFlug->data->time) == -1)
+			if(flug->getFlightdata()->getTime().compare(tempFlug->getFlightdata()->getTime()) == -1)
 				switching = true;
 			break;
 		case 10:
-			if(flug->data->rollway < tempFlug->data->rollway)
+			if(flug->getFlightdata()->getRollway() < tempFlug->getFlightdata()->getRollway())
 				switching = true;
 			break;
 		case 11:
-			if(flug->data->pilot.compare(tempFlug->data->pilot) == -1)
+			if(flug->getFlightdata()->getPilot().compare(tempFlug->getFlightdata()->getPilot()) == -1)
 				switching = true;
 			break;
 		case 12:
-			if(flug->data->numberplate.compare(tempFlug->data->numberplate) == -1)
+			if(flug->getFlightdata()->getNumberplate().compare(tempFlug->getFlightdata()->getNumberplate()) == -1)
 				switching = true;
 			break;
 		}
 		if (switching)
-			switchFlights(flugplan, flug->data->number, tempFlug->data->number);
-		sortFlight(flugplan, flug, tempFlug, sortBy);
+			switchFlights(flug->getFlightdata()->getNumber(), tempFlug->getFlightdata()->getNumber());
+		sortFlight(flug, tempFlug, sortBy);
 	}
 }
 
-bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet
+bool TFlightplan::nextFlight (void)//sollte gehen /not testet
 {
 	bool result = false;
 
-	if (getnextFlight(flightplan->current) != NULL)
+	if (current->getnextFlight() != NULL)
 	{
-		flightplan->current = getnextFlight(flightplan->current);
+		current = current->getnextFlight();
 		result = true;
 	}
 	else
@@ -233,13 +228,13 @@ bool nextFlight (TFlightplan * flightplan)//sollte gehen /not testet
 	return result;
 }
 
-bool prevFlight (TFlightplan * flightplan)//muss überarbeitet werden /not testet
+bool TFlightplan::prevFlight (void)//muss überarbeitet werden /not testet
 {
 	bool result = false;
 
-	if (getprevFlight(flightplan->current) != NULL)
+	if (current->getprevFlight() != NULL)
 	{
-		flightplan->current = getprevFlight(flightplan->current);
+		current = current->getprevFlight();
 		result = true;
 	}
 	else
@@ -248,5 +243,27 @@ bool prevFlight (TFlightplan * flightplan)//muss überarbeitet werden /not testet
 	return result;
 }
 
+TFlight	* TFlightplan::getCurrent (void)
+{
+	return current;
+}
 
+void TFlightplan::setCurrent (TFlight * current)
+{
+	TFlightplan::current = current;
+}
 
+TFlight	* TFlightplan::getFirst (void)
+{
+	return first;
+}
+
+TFlight	* TFlightplan::getLast (void)
+{
+	return last;
+}
+
+int TFlightplan::getCount (void)
+{
+	return count;
+}

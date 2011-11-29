@@ -1,45 +1,46 @@
 #include "Flight.h"
 
-TFlight * createFlight (TFlightdata * flightdata)
+TFlight::TFlight (TFlightdata * flightdata)
 {
-	TFlight * tempFlight = new TFlight;
-	tempFlight->data = flightdata;
-	tempFlight->next = NULL;
-	tempFlight->prev = NULL;
-
-	return tempFlight;
+	data = flightdata;
+	next = NULL;
+	prev = NULL;
 }
 
-
-void deleteFlight (TFlight * flight)
+TFlight::~TFlight ()
 {
-	try
-	{
-		deleteFlightdata(flight->data);
-		delete flight;
-	}
-	catch (char * str )
-	{
-		//cout << "Folgender Fehler beim Löschen eines Fluges aufgetreten: \n" << str << endl;
-	}
+	delete data;
+	data = NULL;
+	next = NULL;
+	prev = NULL;
 }
 
-void setprevFlight (TFlight * flight, TFlight * prevFlight)
+void TFlight::setprevFlight (TFlight * prevFlight)
 {
-	flight->prev = prevFlight;
+	prev = prevFlight;
 }
 
-TFlight * getprevFlight	(TFlight * flight)
+TFlight * TFlight::getprevFlight	(void)
 {
-	return flight->prev;
+	return prev;
 }
 
-void setnextFlight (TFlight * flight, TFlight * nextFlight)
+void TFlight::setnextFlight (TFlight * nextFlight)
 {
-	flight->next = nextFlight;
+	next = nextFlight;
 }
 
-TFlight * getnextFlight (TFlight * flight)
+TFlight * TFlight::getnextFlight (void)
 {
-	return flight->next;
+	return next;
+}
+
+void TFlight::setFlightdata (TFlightdata * flightdata)
+{
+	data = flightdata;
+}
+
+TFlightdata * TFlight::getFlightdata (void)
+{
+	return data;
 }
