@@ -5,7 +5,10 @@ Flugplan2/Debug/*
 ipch/*
 Flugplan2.opensdf
 Flugplan2.sdf
-
+Flugplan2/export-html.html
+Flugplan2/export.txt
+Flugplan2/flightdata.js
+Flugplan2/flightdata.json
 
 #ignore thumbnails created by windows
 Thumbs.db
@@ -35,8 +38,3 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-Flugplan2.sdf
-Flugplan2/export-html.html
-Flugplan2/export.txt
-Flugplan2/flightdata.js
-Flugplan2/flightdata.json
