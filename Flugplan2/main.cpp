@@ -5,7 +5,7 @@ int main (void)
 	system("cls");
 	cout << "Dies ist eine Flugplanverwaltung!\n\n";
 
-	TFlightplan * flightplan = createFlightplan();
+	TFlightplan * flightplan = new TFlightplan;
 	TFlightdata * tempFlightdata = NULL;
 
 	bool ende = false;
@@ -34,9 +34,9 @@ int main (void)
 				break;
 			case '2': 
 				system("cls");
-				tempFlightdata = createFlightdata();
+				tempFlightdata = new TFlightdata;
 				inputFlightdata (tempFlightdata);
-				newFlight(flightplan, tempFlightdata);
+				flightplan->newFlight(tempFlightdata);
 				backToMenue(false);
 				break;
 			case '3':
@@ -45,19 +45,19 @@ int main (void)
 				cout << "\nBitte die zu aendernde Flugnummer eingeben: ";
 				cin >> flightnumber;
 				cin.ignore();
-				searchFlight(flightplan, flightnumber);
-				if (flightplan->current)
-					inputFlightdata(flightplan->current->data);
+				flightplan->searchFlight(flightnumber);
+				if (flightplan->getCurrent())
+					inputFlightdata(flightplan->getCurrent()->getFlightdata());
 				backToMenue(0);
 				break;
 			case '4':
 				system("cls");
 				cout << "Bitte die zu loeschende Flugnummer eingeben: ";
 				cin >> flightnumber;
-				searchFlight(flightplan, flightnumber);
-				if (flightplan->current)
+				flightplan->searchFlight(flightnumber);
+				if (flightplan->getCurrent())
 				{
-					removeFlight(flightplan);
+					flightplan->removeFlight();
 					backToMenue(false);
 				}
 				else
@@ -70,7 +70,7 @@ int main (void)
 				cin >> firstFlightNumber;
 				cout << "Bitte die zweite Flugnummer eingeben: ";
 				cin >> secondFlightNumber;
-				switchFlights(flightplan, firstFlightNumber, secondFlightNumber);
+				flightplan->switchFlights(firstFlightNumber, secondFlightNumber);
 				
 				backToMenue(true);
 				break;
@@ -78,7 +78,7 @@ int main (void)
 				system("cls");
 				sortingMenu();
 				cin >> sortBy;
-				sortFlightplan(flightplan, sortBy);
+				flightplan->sortFlightplan(sortBy);
 				backToMenue(true);
 				break;
 			case '5': 
@@ -95,7 +95,7 @@ int main (void)
 				break;
 			case '7': 
 				system("cls");
-				deleteFlightplan(flightplan, false);
+				flightplan->clear();
 				cout << "Flugplan wurde geloescht" << endl;
 				backToMenue(true);
 				break;
@@ -108,7 +108,7 @@ int main (void)
 
 	//pause();
 
-	deleteFlightplan(flightplan, true);
+	delete flightplan;
 	return 0;
 }
 

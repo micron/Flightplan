@@ -1,22 +1,22 @@
 #pragma once
 
 #include "Flightdata.h"
-#include "Flight.h"
 
-using namespace std;
+//using namespace std;
 
-struct TFlight
+class TFlight
 {
+private:
 	TFlight * next;
 	TFlight * prev;
 	TFlightdata * data;
+public:
+				  TFlight			(TFlightdata * flightdata);
+				  ~TFlight			(void);
+	void		  setprevFlight		(TFlight	 * prevFlight);
+	TFlight		* getprevFlight		(void);
+	void		  setnextFlight		(TFlight	 * nextFlight);
+	TFlight		* getnextFlight		(void);
+	void		  setFlightdata		(TFlightdata * flightdata);
+	TFlightdata * getFlightdata		(void);
 };
-
-TFlight * createFlight		(TFlightdata * flightdata);
-void	  deleteFlight		(TFlight	 * flight);
-void	  setprevFlight		(TFlight	 * flight,
-							 TFlight	 * prevFlight);
-TFlight * getprevFlight		(TFlight	 * flight);
-void	  setnextFlight		(TFlight	 * flight,
-							 TFlight	 * nextFlight);
-TFlight * getnextFlight		(TFlight	 * flight);

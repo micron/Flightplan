@@ -7,30 +7,36 @@
 
 using namespace std;
 
-struct TFlightplan
+class TFlightplan
 {
-	int		count;
-	TFlight * first; 
-	TFlight * current;
-	TFlight * last;
+private:
+	int			count;
+	TFlight *	first; 
+	TFlight *	current;
+	TFlight *	last;
+public:
+	//enum sortby {number, destination, time, rollway, pilot, numberplate};
+
+				TFlightplan		(void);						//Constructor
+				~TFlightplan	(void);			//Destructor, clears only the flighplan list if hardDelete is false
+	void		clear			(void);
+	void		newFlight		(TFlightdata *	flightdata);
+	void		removeFlight	();
+	bool		searchFlight	(int			flightnumber);
+	void		switchFlights	(int			firstFlight,
+								 int			secondFlight);
+	void		sortFlightplan	(int			sortBy);
+	void		sortFlight		(TFlight *		flug,
+								 TFlight *		&tempFlug,
+								 int			sortBy);
+	bool		nextFlight		(void);
+	bool		prevFlight		(void);
+	TFlight	*	getCurrent		(void);
+	void		setCurrent		(TFlight *		current);
+	TFlight	*	getFirst		(void);
+	TFlight	*	getLast			(void);
+	int			getCount		(void);
 };
 
-enum sortby {number, destination, time, rollway, pilot, numberplate};
 
-TFlightplan	* createFlightplan (void);						//Constructor
-void		  deleteFlightplan  (TFlightplan * flightplan, bool hardDelete);	//Destructor, clears only the flighplan list if hardDelete is false
-
-void		  newFlight			(TFlightplan * flightplan, TFlightdata * flightdata);
-void		  removeFlight		(TFlightplan * flightplan);
-bool		  searchFlight		(TFlightplan * flightplan,
-								 int		   flightnumber);
-void		  switchFlights (TFlightplan * flugplan, int firstFlight, int secondFlight);
-void		  sortFlightplan (TFlightplan * flugplan, int sortBy);
-void		  sortFlight(TFlightplan * flugplan, TFlight * flug, TFlight  *(&tempFlug), int sortBy);
-
-//void		  changeFlight		(TFlightplan * flightplan);
-
-bool		  nextFlight		(TFlightplan * flightplan);
-bool		  prevFlight		(TFlightplan * flightplan);
-//void		  cleanup			(TFlightplan * flightplan);
 

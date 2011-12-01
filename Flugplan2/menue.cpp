@@ -52,37 +52,37 @@ void inputFlightdata (TFlightdata * tempFlightdata)
 	int tempInt = 0;
 	string tempString = "";
 
-	cout << "Flugnummer (" << tempFlightdata->number << "): ";
+	cout << "Flugnummer (" << tempFlightdata->getNumber() << "): ";
 	getline(cin, tempString);
 	tempInt = atoi(tempString.c_str());
 	if (tempInt != 0)
-		tempFlightdata->number = tempInt;
+		tempFlightdata->setNumber(tempInt);
 
-	cout << "Flugziel (" << tempFlightdata->destination << "): ";
+	cout << "Flugziel (" << tempFlightdata->getDestination() << "): ";
 	getline(cin, tempString);
 	if (tempString != "")
-		tempFlightdata->destination = tempString;
+		tempFlightdata->setDestination(tempString);
 
-	cout << "Zeit (" << tempFlightdata->time << "): ";
+	cout << "Zeit (" << tempFlightdata->getTime() << "): ";
 	getline(cin, tempString);
 	if (tempString != "")
-		tempFlightdata->time = tempString;
+		tempFlightdata->setTime(tempString);
 
-	cout << "Rollbahn (" << tempFlightdata->rollway << "): ";
+	cout << "Rollbahn (" << tempFlightdata->getRollway() << "): ";
 	getline(cin, tempString);
 	tempInt = atoi(tempString.c_str());
 	if (tempInt != 0)
-		tempFlightdata->rollway = tempInt;
+		tempFlightdata->setRollway(tempInt);
 
-	cout << "Pilot (" << tempFlightdata->pilot << "): ";
+	cout << "Pilot (" << tempFlightdata->getPilot() << "): ";
 	getline(cin, tempString);
 	if (tempString != "")
-		tempFlightdata->pilot = tempString;
+		tempFlightdata->setPilot(tempString);
 
-	cout << "Flugkennung (" << tempFlightdata->numberplate << "): ";
+	cout << "Flugkennung (" << tempFlightdata->getNumberplate() << "): ";
 	getline(cin, tempString);
 	if (tempString != "")
-		tempFlightdata->numberplate = tempString;
+		tempFlightdata->setNumberplate(tempString);
 
 };
 
@@ -99,7 +99,7 @@ void importFlightplan(TFlightplan * flightplan)
 	getline(tempInput, temp);
 
 	while (!tempInput.eof())
-		newFlight(flightplan, importFlight(&tempInput));
+		flightplan->newFlight(importFlight(&tempInput));
 }
 
 string readSubString (string * readString)
@@ -116,29 +116,29 @@ string readSubString (string * readString)
 
 TFlightdata * importFlight (ifstream  * tempInput)
 {
-	TFlightdata * tempFlightdata = createFlightdata();
+	TFlightdata * tempFlightdata = new TFlightdata;
 
 	string tempString, readString = "";
 
 	getline(*tempInput, readString);
 
 	tempString = readSubString (&readString);
-	tempFlightdata->number = atoi(tempString.c_str());
+	tempFlightdata->setNumber(atoi(tempString.c_str()));
 
 	tempString = readSubString (&readString);
-	tempFlightdata->destination = tempString;
+	tempFlightdata->setDestination (tempString);
 
 	tempString = readSubString (&readString);
-	tempFlightdata->time = tempString;
+	tempFlightdata->setTime (tempString);
 
 	tempString = readSubString (&readString);
-	tempFlightdata->rollway = atoi(tempString.c_str());
+	tempFlightdata->setRollway (atoi(tempString.c_str()));
 
 	tempString = readSubString (&readString);
-	tempFlightdata->pilot = tempString;
+	tempFlightdata->setPilot (tempString);
 	
 	tempString = readSubString (&readString);
-	tempFlightdata->numberplate = tempString;
+	tempFlightdata->setNumberplate (tempString);
 
 	return tempFlightdata;
 };
@@ -149,17 +149,17 @@ string outputFlight (TFlightplan * flightplan) //sollte gehen
 	string out = "";
 	ostringstream temp;
 
-	temp << flightplan->current->data->number;
+	temp << flightplan->getCurrent()->getFlightdata()->getNumber();
 	out += temp.str() + '\t';
-	out += flightplan->current->data->destination + '\t';
-	out += flightplan->current->data->time + '\t';
+	out += flightplan->getCurrent()->getFlightdata()->getDestination() + '\t';
+	out += flightplan->getCurrent()->getFlightdata()->getTime() + '\t';
 	temp.str("");
-	temp << flightplan->current->data->rollway;
+	temp << flightplan->getCurrent()->getFlightdata()->getRollway();
 	out += temp.str() + '\t';
-	out += flightplan->current->data->pilot + '\t';
-	out += flightplan->current->data->numberplate;
+	out += flightplan->getCurrent()->getFlightdata()->getPilot() + '\t';
+	out += flightplan->getCurrent()->getFlightdata()->getNumberplate();
 	
-	if (flightplan->current != flightplan->last)
+	if (flightplan->getCurrent() != flightplan->getLast())
 		out += '\n';
 
 	return out;
@@ -180,50 +180,52 @@ void exportFlightPlan (TFlightplan * flightplan){
 	htmlFile << "<html><head><title>Flugdaten HTML Export</title></head><body><table border=\"1\"><tr>";
 	htmlFile << "<td>Flugnummer</td><td>Flug Ziel</td><td>Zeit</td><td>Rollbahn</td><td>Pilot</td><td>Flugkennung</td></tr>";
 
-	jsonFile << "{\"flightdata\":{\"count\":" << flightplan->count << "},";
+	jsonFile << "{\"flightdata\":{\"count\":" << flightplan->getCount() << "},";
 	jsonFile << "{\"flights\":";
 
 	jsFile << "var flights = [];";
 
-	if(flightplan->count != 0){
-		flightplan->current = flightplan->first;
+	if(flightplan->getCount() != 0){
+		flightplan->setCurrent(flightplan->getFirst());
 
 		do{
 			exportFile << outputFlight(flightplan).c_str();
+
+
 			// html stuff
-			htmlFile << "<tr><td>" << flightplan->current->data->number << "</td>";
-			htmlFile << "<td>" << flightplan->current->data->destination.c_str() << "</td>";
-			htmlFile << "<td>" << flightplan->current->data->time.c_str() << "</td>";
-			htmlFile << "<td>" << flightplan->current->data->rollway << "</td>";
-			htmlFile << "<td>" << flightplan->current->data->pilot.c_str() << "</td>";
-			htmlFile << "<td>" << flightplan->current->data->numberplate.c_str() << "</td></tr>";
+			htmlFile << "<tr><td>" << flightplan->getCurrent()->getFlightdata()->getNumber() << "</td>";
+			htmlFile << "<td>" << flightplan->getCurrent()->getFlightdata()->getDestination().c_str() << "</td>";
+			htmlFile << "<td>" << flightplan->getCurrent()->getFlightdata()->getTime().c_str() << "</td>";
+			htmlFile << "<td>" << flightplan->getCurrent()->getFlightdata()->getRollway() << "</td>";
+			htmlFile << "<td>" << flightplan->getCurrent()->getFlightdata()->getPilot().c_str() << "</td>";
+			htmlFile << "<td>" << flightplan->getCurrent()->getFlightdata()->getNumberplate().c_str() << "</td></tr>";
 			//json stuff
 			jsonFile << "{\"" << count << "\":{";
-			jsonFile << "\"number\":" << "\"" << flightplan->current->data->number << "\",";
-			jsonFile << "\"destination\":" << "\"" << flightplan->current->data->destination.c_str() << "\",";
-			jsonFile << "\"time\":" << "\"" << flightplan->current->data->time.c_str() << "\",";
-			jsonFile << "\"rollway\":" << "\"" << flightplan->current->data->rollway << "\",";
-			jsonFile << "\"pilot\":" << "\"" << flightplan->current->data->pilot.c_str() << "\",";
-			jsonFile << "\"numberplate\":" << "\"" << flightplan->current->data->numberplate.c_str() << "\"";
+			jsonFile << "\"number\":" << "\"" << flightplan->getCurrent()->getFlightdata()->getNumber() << "\",";
+			jsonFile << "\"destination\":" << "\"" << flightplan->getCurrent()->getFlightdata()->getDestination().c_str() << "\",";
+			jsonFile << "\"time\":" << "\"" << flightplan->getCurrent()->getFlightdata()->getTime().c_str() << "\",";
+			jsonFile << "\"rollway\":" << "\"" << flightplan->getCurrent()->getFlightdata()->getRollway() << "\",";
+			jsonFile << "\"pilot\":" << "\"" << flightplan->getCurrent()->getFlightdata()->getPilot().c_str() << "\",";
+			jsonFile << "\"numberplate\":" << "\"" << flightplan->getCurrent()->getFlightdata()->getNumberplate().c_str() << "\"";
 
 			
-			jsFile << "flights.push({number:'" << flightplan->current->data->number << "',";
-			jsFile << "destination:'" << flightplan->current->data->destination.c_str() << "',";
-			jsFile << "time:'" << flightplan->current->data->time.c_str() << "',";
-			jsFile << "rollway:'" << flightplan->current->data->rollway << "',";
-			jsFile << "pilot:'" << flightplan->current->data->pilot.c_str() << "',";
-			jsFile << "numberplate:'" << flightplan->current->data->numberplate.c_str() << "'});";
+			jsFile << "flights.push({number:'" << flightplan->getCurrent()->getFlightdata()->getNumber() << "',";
+			jsFile << "destination:'" << flightplan->getCurrent()->getFlightdata()->getDestination().c_str() << "',";
+			jsFile << "time:'" << flightplan->getCurrent()->getFlightdata()->getTime().c_str() << "',";
+			jsFile << "rollway:'" << flightplan->getCurrent()->getFlightdata()->getRollway() << "',";
+			jsFile << "pilot:'" << flightplan->getCurrent()->getFlightdata()->getPilot().c_str() << "',";
+			jsFile << "numberplate:'" << flightplan->getCurrent()->getFlightdata()->getNumberplate().c_str() << "'});";
 
 			count = count + 1;
 
-			if(flightplan->count >= count){
+			if(flightplan->getCount() >= count){
 				jsonFile << "}";
 			}else{
 				jsonFile << "},";
 			}
 			
-			if(getnextFlight(flightplan->current)){
-				nextFlight(flightplan);
+			if(flightplan->getCurrent()->getnextFlight()){
+				flightplan->nextFlight();
 			}
 			else
 				ende = true;
@@ -245,14 +247,14 @@ void outputFlightPlan (TFlightplan * flightplan)
 	bool ende = false;
 	cout << "Flugnr.\t" << "Flug Ziel\t" << "Zeit\t" << "Rollbahn\t" << "Pilot\t" << "Flugkennung\n";
 	
-	if (flightplan->count != 0)
+	if (flightplan->getCount() != 0)
 	{
-		flightplan->current = flightplan->first;
+		flightplan->setCurrent(flightplan->getFirst());
 		do
 		{
 			cout << outputFlight (flightplan).c_str();
-			if (getnextFlight(flightplan->current))
-				nextFlight (flightplan);
+			if (flightplan->getCurrent()->getnextFlight())
+				flightplan->nextFlight ();
 			else
 				ende = true;
 		}while (!ende);
